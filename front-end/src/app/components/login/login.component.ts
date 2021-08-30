@@ -7,15 +7,19 @@ import { TokenService } from 'src/app/services/token/token.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent {
 
+  constructor(private fb: FormBuilder, private ts: TokenService) { }
 
-  constructor(private fb: FormBuilder, private t: TokenService) { }
+  token = ''
+  message = ''
+  mark = false
 
   loginForm = this.fb.group(
     {
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: [''],
+      password: ['']
     }
   );
 
@@ -23,13 +27,35 @@ export class LoginComponent {
     const user = this.loginForm.value;
 
     if (user.username && user.password) {
-      this.t.requesttoken(user.username, user.password)
-      .subscribe(
-        (res) => {
-          console.log(res.toString);
-        }
-      )
+      this.ts.requesttoken(user.username, user.password)
+        .subscribe(
+          (res) => {
+            console.log(res.token);
+            this.token = res.token;
+            this.mark = true;
+            this.message = '';
+          },
+          (err) => {
+            this.message = "Incorrect username or password";
+            this.mark = false;
+          }
+        );
     }
   }
 
+  sendToken() {
+    this.ts.verifytoken(this.token)
+    .subscribe(
+      (res) => {
+        this.message = res.message;
+        
+      }
+      ,
+      (err) =>{
+
+        this.message = err.status + " " + err.statusText;
+      }
+    )
+
+  }
 }
