@@ -17,4 +17,5 @@ export class TokenService {
   verifytoken(a: string){
     return this.http.post<any>(`${this.URL}/verify`,{a})
   }
+  
 }
