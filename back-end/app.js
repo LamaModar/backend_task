@@ -41,6 +41,16 @@ app.post('/api/verify', (req, res) => {
   }
 })
 
+// app.post('/api/home', (req, res) => {
+//   try {
+//     let verification = jwt.verify(req.header.token, secret);
+//     res.status(200).send(homepage);
+
+//   } catch (err) {
+//     res.status(401).send(err);
+//   }
+// })
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
